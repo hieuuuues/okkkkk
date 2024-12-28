@@ -1,0 +1,269 @@
+<!-- exercise2.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài tập 2 - Phương trình bậc 2</title>
+    <style>
+      /* Sử dụng lại CSS từ exercise1.html */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        background-color: #f0f2f5;
+      }
+
+      .exercise-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .timer {
+        font-size: 1.2em;
+        color: #1a73e8;
+      }
+
+      .question {
+        margin-bottom: 25px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 4px;
+      }
+
+      .question h3 {
+        margin-bottom: 10px;
+        color: #1a73e8;
+      }
+
+      .options {
+        margin-top: 10px;
+      }
+
+      .option {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .option:hover {
+        background: #e8f0fe;
+      }
+
+      .option input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .button-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        margin: 0 10px;
+      }
+
+      .submit-btn {
+        background: #1a73e8;
+        color: white;
+      }
+
+      .submit-btn:hover {
+        background: #1557b0;
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .correct {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .incorrect {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      #timeSpent {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="exercise-container">
+      <div class="header">
+        <h1>Bài tập 2: Phương trình bậc 2</h1>
+        <div class="timer" id="timer">00:00</div>
+      </div>
+
+      <div id="questions">
+        <div class="question" id="q1">
+          <h3>Câu 1: Phương trình x² + 2x + 1 = 0 có nghiệm là:</h3>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="q1" value="1" /> A) x = 1
+            </label>
+            <label class="option">
+              <input type="radio" name="q1" value="-1" data-correct="true" /> B)
+              x = -1
+            </label>
+            <label class="option">
+              <input type="radio" name="q1" value="2" /> C) x = 2
+            </label>
+            <label class="option">
+              <input type="radio" name="q1" value="0" /> D) x = 0
+            </label>
+          </div>
+          <div class="result"></div>
+        </div>
+
+        <div class="question" id="q2">
+          <h3>Câu 2: Phương trình x² - 4 = 0 có nghiệm là:</h3>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="q2" value="2,-2" data-correct="true" />
+              A) x = ±2
+            </label>
+            <label class="option">
+              <input type="radio" name="q2" value="4,-4" /> B) x = ±4
+            </label>
+            <label class="option">
+              <input type="radio" name="q2" value="1,-1" /> C) x = ±1
+            </label>
+            <label class="option">
+              <input type="radio" name="q2" value="0" /> D) x = 0
+            </label>
+          </div>
+          <div class="result"></div>
+        </div>
+
+        <div class="question" id="q3">
+          <h3>Câu 3: Phương trình x² + 1 = 0 có:</h3>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="q3" value="1" /> A) 1 nghiệm
+            </label>
+            <label class="option">
+              <input type="radio" name="q3" value="2" /> B) 2 nghiệm
+            </label>
+            <label class="option">
+              <input type="radio" name="q3" value="0" data-correct="true" /> C)
+              Vô nghiệm
+            </label>
+            <label class="option">
+              <input type="radio" name="q3" value="inf" /> D) Vô số nghiệm
+            </label>
+          </div>
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button id="submitBtn" class="btn submit-btn">Nộp bài</button>
+      </div>
+
+      <div id="timeSpent"></div>
+    </div>
+
+    <script src="tracking.js"></script>
+    <script>
+      const tracker = new ExerciseTracker();
+      tracker.startExercise("2");
+
+      let startTime = new Date();
+      let timerInterval;
+
+      function updateTimer() {
+        const now = new Date();
+        const timeSpent = Math.floor((now - startTime) / 1000);
+        const minutes = Math.floor(timeSpent / 60);
+        const seconds = timeSpent % 60;
+        document.getElementById("timer").textContent = `${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      }
+
+      timerInterval = setInterval(updateTimer, 1000);
+
+      document
+        .getElementById("submitBtn")
+        .addEventListener("click", function () {
+          clearInterval(timerInterval);
+
+          let correct = 0;
+          let wrong = 0;
+
+          document.querySelectorAll(".question").forEach((question) => {
+            const selectedAnswer = question.querySelector(
+              'input[type="radio"]:checked'
+            );
+            const correctAnswer = question.querySelector(
+              'input[data-correct="true"]'
+            );
+            const resultDiv = question.querySelector(".result");
+
+            if (selectedAnswer) {
+              if (selectedAnswer.dataset.correct) {
+                resultDiv.textContent = "Đúng!";
+                resultDiv.className = "result correct";
+                correct++;
+              } else {
+                resultDiv.textContent = "Sai!";
+                resultDiv.className = "result incorrect";
+                wrong++;
+              }
+              resultDiv.style.display = "block";
+            } else {
+              wrong++;
+            }
+          });
+
+          tracker.finishExercise("2", correct, wrong);
+
+          // Hiển thị kết quả
+          alert(`Kết quả:\nĐúng: ${correct}\nSai: ${wrong}`);
+
+          // Chuyển về trang chủ sau 3 giây
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 3000);
+        });
+    </script>
+  </body>
+</html>
